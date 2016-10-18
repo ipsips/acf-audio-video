@@ -1,4 +1,4 @@
-# ACF Advanced Custom Fields: Audio/Video Field
+# Advanced Custom Fields: Audio/Video Field
 
 Select an audio or video from the Media Library.
 
