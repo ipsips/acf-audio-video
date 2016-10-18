@@ -1,19 +1,15 @@
------------------------
-
-# ACF Advanced Custom Fields: Audio/Video Field Field
+# ACF Advanced Custom Fields: Audio/Video Field
 
 Select an audio or video from the Media Library.
 
------------------------
+![](acf-audio-video-screencast.gif)
 
-### Description
-
-Select an audio or video from the Media Library.
+![](acf-audio-video-edit-screencast.gif)
 
 ### Compatibility
 
 This ACF field type is compatible with:
-* ACF 5
+* ACF 5 (aka ACF Pro)
 
 ### Installation
 
