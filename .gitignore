@@ -1,0 +1,22 @@
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ignore all files starting with .
+.*
+
+# track these files (i.e. do NOT ignore them)
+!.gitignore
+!.babelrc
+
+# ignore log files
+*.log
+
+# ignore node/grunt dependency directories
+node_modules/

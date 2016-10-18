@@ -1,0 +1,59 @@
+@charset 'UTF-8';
+
+.acf-audio-video-uploader {
+  &:after {
+    display: block;
+    clear: both;
+    content: '';
+    height: 0;
+    visibility: hidden;
+  }
+
+
+  .view {
+    position: relative;
+    float: left;
+    max-width: 100%;
+    min-width: 300px;
+    
+    ul {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 1;
+
+      li + li {
+        margin-left: 2px;
+      }
+    }
+
+    .audio + ul {
+      top: -20px;
+      right: -10px;
+    }
+  }
+
+  .wp-audio,
+  .wp-video {
+    width: 640px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* it doesn't make sense to hide audio player controls
+   * nor clip the floating time label
+   */
+  .audio .mejs-controls {
+    overflow: visible !important;
+
+    &.mejs-offscreen {
+      clip: auto !important;
+      clip-path: none !important;
+    }
+  }
+
+  a.acf-icon {
+    border: 0;
+    box-shadow: 0 1px 3px fade(black, 30%);
+  }
+}

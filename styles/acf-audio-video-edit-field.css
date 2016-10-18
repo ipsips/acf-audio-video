@@ -1,0 +1,77 @@
+@charset 'UTF-8';
+.acf-field-object-audioVideo tr[data-name="allowed_types"] .description {
+  font-style: normal;
+  font-size: 12px;
+  color: #888;
+  margin-top: .5em;
+}
+#acf-audio-video-return-format-help-btn {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 15px;
+  font-style: normal;
+  line-height: 1;
+  opacity: .6;
+  cursor: pointer;
+}
+#acf-audio-video-return-format-help-btn:after {
+  content: '\f348';
+  font-family: dashicons;
+}
+#acf-audio-video-return-format-help-btn:hover,
+#acf-audio-video-return-format-help-btn:active {
+  opacity: 1;
+  color: #00a0d2;
+}
+#acf-audio-video-return-format-help .media-modal {
+  max-width: 800px;
+  margin: 0 auto;
+}
+#acf-audio-video-return-format-help .media-modal-content > div,
+#acf-audio-video-return-format-help .media-modal-content .loading {
+  height: 100%;
+}
+#acf-audio-video-return-format-help .loading {
+  position: relative;
+}
+#acf-audio-video-return-format-help .spinner {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  margin: -10px;
+}
+#acf-audio-video-return-format-help .media-frame-title,
+#acf-audio-video-return-format-help .media-frame-content {
+  left: 0;
+}
+#acf-audio-video-return-format-help .media-frame-content {
+  top: 50px;
+  bottom: 0;
+  border-bottom: 0;
+  padding: 0 16px 16px;
+}
+#acf-audio-video-return-format-help .media-modal-close {
+  border-left: 1px solid #ddd;
+}
+#acf-audio-video-return-format-help .media-modal-close .media-modal-icon:before {
+  content: "\f335";
+  font-size: 22px;
+}
+#acf-audio-video-return-format-help .media-modal-close:hover,
+#acf-audio-video-return-format-help .media-modal-close:focus {
+  background: #ddd;
+  border-color: #ccc;
+  color: #000;
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+#acf-audio-video-return-format-help .media-modal-close:hover .media-modal-icon:before,
+#acf-audio-video-return-format-help .media-modal-close:focus .media-modal-icon:before {
+  color: black;
+}
+#acf-audio-video-return-format-help pre code {
+  overflow: auto;
+  display: block;
+}
