@@ -6,8 +6,8 @@ Description: Select an audio or video from the Media Library.
 Version:     1.0.0
 Author:      ips.re
 Author URI:  http://ips.re/
-License:     GPL2
-License URI: https://www.gnu.org/licenses/gpl-2.0.txt
+License:     Apache License 2.0
+License URI: https://www.apache.org/licenses/LICENSE-2.0.txt
 Text Domain: acf-audio-video
 Domain Path: /languages
 */
