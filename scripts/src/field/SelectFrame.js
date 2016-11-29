@@ -1,3 +1,5 @@
+const $ = jQuery
+
 export default class SelectFrame {
   constructor(settings) {
     let postId = acf.get('post_id')

@@ -179,6 +179,7 @@ class ACF_AudioVideo_Field extends acf_field {
       'data-player-defaults' => $this->playerDefaults,
       'data-uploader' => 'wp'
     ];
+    $tag = '';
 
     if ($field['value'] && count($field['value'])) {
       $div['class'].= ' has-value';

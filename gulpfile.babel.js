@@ -1,11 +1,12 @@
-import path       from 'path'
-import gulp       from 'gulp'
-import less       from 'gulp-less'
-import livereload from 'gulp-livereload'
-import rename     from 'gulp-rename'
-import sourcemaps from 'gulp-sourcemaps'
-import gutil      from 'gulp-util'
-import webpack    from 'gulp-webpack'
+import path         from 'path'
+import gulp         from 'gulp'
+import less         from 'gulp-less'
+import livereload   from 'gulp-livereload'
+import rename       from 'gulp-rename'
+import sourcemaps   from 'gulp-sourcemaps'
+import gutil        from 'gulp-util'
+import gulpWebpack  from 'gulp-webpack'
+import webpack      from 'webpack'
 
 const files = [{
   src: 'scripts/src/field/index.js',
@@ -47,29 +48,30 @@ gulp.task('default',
 function compile(file, watch = false) {
   if (isScript(file)) {
     const filename = file.basename+(watch ? '' : '.min')+'.js'
+    const config = {
+      watch,
+      module: {
+        loaders: [{
+          test: /\.(es6|js)$/,
+          loader: 'babel-loader'
+        }]
+      },
+      resolve: {
+        extensions: ['', '.js', '.jsx', '.es6', '.css', '.scss', '.local']
+      },
+      output: { filename },
+      devtool: 'source-map'
+    }
 
     if (watch)
       gulp.watch(file.dest+'/'+filename, (evt) =>
         livereload.changed(evt.path)
       )
+    else
+      config.plugins = [new webpack.optimize.UglifyJsPlugin()]
 
     return gulp.src(file.src)
-      .pipe(
-        webpack({
-          watch,
-          module: {
-            loaders: [{
-              test: /\.(es6|js)$/,
-              loader: 'babel-loader'
-            }]
-          },
-          resolve: {
-            extensions: ['', '.js', '.jsx', '.es6', '.css', '.scss', '.local']
-          },
-          output: { filename },
-          devtool: 'source-map'
-        })
-      )
+      .pipe(gulpWebpack(config))
       .on('error', error)
       .pipe(gulp.dest(file.dest))
     

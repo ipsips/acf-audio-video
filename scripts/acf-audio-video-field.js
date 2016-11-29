@@ -347,6 +347,8 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	var $ = jQuery;
+	
 	var SelectFrame = function SelectFrame(settings) {
 	  var _this = this;
 	
