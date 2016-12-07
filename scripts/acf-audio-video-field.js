@@ -81,6 +81,16 @@
 	      return t.trim();
 	    });
 	    this.selectFrameType = !this.o.general_type || this.o.general_type == 'both' ? ['audio', 'video'] : this.o.general_type;
+	    this.inputName = this.__getInputName();
+	  },
+	  __getInputName: function __getInputName() {
+	    var inputName = this.$inputContainer.children(':first').attr('name').split('][');
+	
+	    if (inputName[inputName.length - 1].indexOf('field') == 0) return inputName.join('][');
+	
+	    inputName.splice(inputName.length - 1, 1);
+	
+	    return inputName.join('][') + ']';
 	  },
 	  initialize: function initialize() {
 	    /* noop */
@@ -103,8 +113,6 @@
 	    var tag = _ref.tag;
 	    var nextAttributes = _ref.nextAttributes;
 	    var prevAttributes = _ref.prevAttributes;
-	    var repeaterKey = _ref.repeaterKey;
-	    var rowId = _ref.rowId;
 	
 	    var sources = tag ? this.__getSources(tag, nextAttributes) : [];
 	
@@ -117,7 +125,7 @@
 	      new MediaElementPlayer($mediaElement);
 	
 	      Object.keys(nextAttributes).forEach(function (name) {
-	        return _this.__insertHiddenInput(name, nextAttributes[name], repeaterKey, rowId);
+	        return _this.__insertHiddenInput(name, nextAttributes[name]);
 	      });
 	      this.$el.addClass('has-value');
 	    } else {
@@ -175,12 +183,12 @@
 	      return attributes.hasOwnProperty(name) ? atts + ' ' + name + '="' + attributes[name] + '"' : atts;
 	    }, '');
 	  },
-	  __insertHiddenInput: function __insertHiddenInput(attName, value, repeaterKey, rowId) {
+	  __insertHiddenInput: function __insertHiddenInput(attName, value) {
 	    var _$field$data = this.$field.data();
 	
 	    var key = _$field$data.key;
 	
-	    var name = !attName ? 'acf[' + key + ']' : repeaterKey && rowId ? 'acf[' + repeaterKey + '][' + rowId + '][' + key + '][' + attName + ']' : 'acf[' + key + '][' + attName + ']';
+	    var name = !attName ? this.inputName : this.inputName + '[' + attName + ']';
 	
 	    $('<input type="hidden">').attr({ name: name, value: value }).appendTo(this.$inputContainer);
 	  },
@@ -256,11 +264,6 @@
 	
 	        var args = { tag: tag, nextAttributes: nextAttributes };
 	
-	        if (multiple) {
-	          args.repeaterKey = $repeater.data('key');
-	          args.rowId = $row.data('id');
-	        }
-	
 	        _this3.set('$field', $field).render(args);
 	      }
 	    }).open();
@@ -280,11 +283,6 @@
 	          var nextAttributes = _this4.__getNextAttributes(tag, editFrame.media.attributes);
 	          var $repeater = acf.get_closest_field(_this4.$field, 'repeater');
 	          var args = { tag: tag, nextAttributes: nextAttributes, prevAttributes: prevAttributes };
-	
-	          if ($repeater.exists()) {
-	            args.repeaterKey = $repeater.data('key');
-	            args.rowId = _this4.$field.closest('.acf-row').data('id');
-	          }
 	
 	          _this4.render(args);
 	          editFrame.detach();

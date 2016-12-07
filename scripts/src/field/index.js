@@ -23,6 +23,20 @@ acf.fields.audioVideo = acf.field.extend({
     this.selectFrameType = !this.o.general_type || this.o.general_type == 'both'
       ? ['audio', 'video']
       : this.o.general_type
+    this.inputName = this.__getInputName()
+  },
+  __getInputName: function () {
+    const inputName = this.$inputContainer
+      .children(':first')
+      .attr('name')
+      .split('][')
+
+    if (inputName[inputName.length - 1].indexOf('field') == 0)
+      return inputName.join('][')
+
+    inputName.splice(inputName.length - 1, 1)
+
+    return inputName.join('][')+']'
   },
   initialize: function () {
     /* noop */
@@ -45,7 +59,7 @@ acf.fields.audioVideo = acf.field.extend({
 
     return 'video'
   },
-  render: function ({ tag, nextAttributes, prevAttributes, repeaterKey, rowId }) {
+  render: function ({ tag, nextAttributes, prevAttributes }) {
     const sources = tag
       ? this.__getSources(tag, nextAttributes)
       : []
@@ -62,7 +76,7 @@ acf.fields.audioVideo = acf.field.extend({
       new MediaElementPlayer($mediaElement)
       
       Object.keys(nextAttributes).forEach(name =>
-        this.__insertHiddenInput(name, nextAttributes[name], repeaterKey, rowId)
+        this.__insertHiddenInput(name, nextAttributes[name])
       )
       this.$el.addClass('has-value')
     } else {
@@ -133,13 +147,11 @@ acf.fields.audioVideo = acf.field.extend({
         ''
       )
   },
-  __insertHiddenInput: function (attName, value, repeaterKey, rowId) {
+  __insertHiddenInput: function (attName, value) {
     const { key } = this.$field.data()
     const name = !attName
-      ? `acf[${key}]`
-      : repeaterKey && rowId
-        ? `acf[${repeaterKey}][${rowId}][${key}][${attName}]`
-        : `acf[${key}][${attName}]`
+      ? this.inputName
+      : `${this.inputName}[${attName}]`
 
     $('<input type="hidden">')
       .attr({ name, value })
@@ -217,11 +229,6 @@ acf.fields.audioVideo = acf.field.extend({
 
         const args = { tag, nextAttributes }
 
-        if (multiple) {
-          args.repeaterKey = $repeater.data('key')
-          args.rowId = $row.data('id')
-        }
-
         this.set('$field', $field).render(args)
       }
     }).open()
@@ -238,11 +245,6 @@ acf.fields.audioVideo = acf.field.extend({
         const nextAttributes = this.__getNextAttributes(tag, editFrame.media.attributes)
         const $repeater = acf.get_closest_field(this.$field, 'repeater')
         const args = { tag, nextAttributes, prevAttributes }
-
-        if ($repeater.exists()) {
-          args.repeaterKey = $repeater.data('key')
-          args.rowId = this.$field.closest('.acf-row').data('id')
-        }
         
         this.render(args)
         editFrame.detach()
