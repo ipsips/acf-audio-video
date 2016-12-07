@@ -361,6 +361,9 @@
 	      library: {},
 	      states: []
 	    }, _this.settings);
+	
+	    if (_this.settings.hasOwnProperty('mime_types')) attributes.library.type = _this._getLibraryTypes();
+	
 	    var Query = wp.media.query(attributes.library);
 	
 	    if (acf.isset(Query, 'mirroring', 'args')) Query.mirroring.args._acfuploader = _this.settings.field;
@@ -408,6 +411,22 @@
 	    });
 	
 	    return _this;
+	  };
+	
+	  this._getLibraryTypes = function () {
+	    var allowedTypes = _this.settings.mime_types.split(',').map(function (t) {
+	      return t.trim();
+	    });
+	    var generalType = _this.settings.type instanceof String ? _this.settings.type : 'video';
+	
+	    var libraryTypes = allowedTypes.map(function (ext) {
+	      return acf.fields.audioVideo.__getMime(generalType, ext);
+	    });
+	
+	    /* allow both audio/ogg and video/ogg */
+	    if (_this.settings.type instanceof Array && allowedTypes.indexOf('ogg') > -1) libraryTypes.push('audio/ogg');
+	
+	    return libraryTypes;
 	  };
 	
 	  var postId = acf.get('post_id');

@@ -37,7 +37,11 @@ export default class SelectFrame {
       multiple: this.settings.multiple,
       library: {},
       states: [],
-    }, this.settings)      
+    }, this.settings)
+
+    if (this.settings.hasOwnProperty('mime_types'))
+      attributes.library.type = this._getLibraryTypes()
+
     const Query = wp.media.query(attributes.library)
     
     if (acf.isset(Query, 'mirroring', 'args'))
@@ -88,5 +92,21 @@ export default class SelectFrame {
     )
 
     return this
+  }
+  _getLibraryTypes = () => {
+    const allowedTypes = this.settings.mime_types.split(',').map(t => t.trim())
+    const generalType = this.settings.type instanceof String
+      ? this.settings.type
+      : 'video'
+
+    const libraryTypes = allowedTypes.map(ext =>
+      acf.fields.audioVideo.__getMime(generalType, ext)
+    )
+
+    /* allow both audio/ogg and video/ogg */
+    if (this.settings.type instanceof Array && allowedTypes.indexOf('ogg') > -1)
+      libraryTypes.push('audio/ogg')
+
+    return libraryTypes
   }
 }

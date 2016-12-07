@@ -259,8 +259,10 @@ class ACF_AudioVideo_Field extends acf_field {
 
     if (!empty($field['allowed_types'])) {
       $valid_allowed_types = array_filter(
-        $field['allowed_types'],
-        function ($ext) {
+        explode(',', $field['allowed_types']),
+        function ($ext) use ($is_general_type_specified) {
+          $ext = trim($ext);
+
           if ($is_general_type_specified)
             return strpos($this->types[$field['general_type']], $ext) !== false;
           else
@@ -270,7 +272,7 @@ class ACF_AudioVideo_Field extends acf_field {
       );
 
       if (!empty($valid_allowed_types))
-        return $valid_allowed_types;
+        return implode(',', $valid_allowed_types);
     }
 
     if ($is_general_type_specified)
