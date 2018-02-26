@@ -26,17 +26,9 @@ acf.fields.audioVideo = acf.field.extend({
     this.inputName = this.__getInputName()
   },
   __getInputName: function () {
-    const inputName = this.$inputContainer
-      .children(':first')
-      .attr('name')
-      .split('][')
-
-    if (inputName[inputName.length - 1].indexOf('field') == 0)
-      return inputName.join('][')
-
-    inputName.splice(inputName.length - 1, 1)
-
-    return inputName.join('][')+']'
+    var key = this.$field.data('key')
+    var inputName = 'acf['+key+']'
+    return inputName
   },
   initialize: function () {
     /* noop */
@@ -153,6 +145,8 @@ acf.fields.audioVideo = acf.field.extend({
     $('<input type="hidden">')
       .attr({ name, value })
       .appendTo(this.$inputContainer)
+
+
   },
   __triggerChange: function (prevAttributes, nextAttributes) {
     /* register unsaved changes */
