@@ -42,7 +42,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 	
@@ -83,6 +83,6 @@
 	  });
 	});
 
-/***/ }
+/***/ })
 /******/ ]);
 //# sourceMappingURL=acf-audio-video-edit-field.js.map
