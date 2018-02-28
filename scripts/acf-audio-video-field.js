@@ -82,9 +82,7 @@
 	    this.inputName = this.__getInputName();
 	  },
 	  __getInputName: function __getInputName() {
-	    var key = this.$field.data('key');
-	    var inputName = 'acf[' + key + ']';
-	    return inputName;
+	    return this.$inputContainer.children(':first').attr('name');
 	  },
 	  initialize: function initialize() {
 	    /* noop */

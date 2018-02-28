@@ -26,9 +26,7 @@ acf.fields.audioVideo = acf.field.extend({
     this.inputName = this.__getInputName()
   },
   __getInputName: function () {
-    var key = this.$field.data('key')
-    var inputName = 'acf['+key+']'
-    return inputName
+    return this.$inputContainer.children(':first').attr('name')
   },
   initialize: function () {
     /* noop */
@@ -145,8 +143,6 @@ acf.fields.audioVideo = acf.field.extend({
     $('<input type="hidden">')
       .attr({ name, value })
       .appendTo(this.$inputContainer)
-
-
   },
   __triggerChange: function (prevAttributes, nextAttributes) {
     /* register unsaved changes */
