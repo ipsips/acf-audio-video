@@ -26,25 +26,13 @@ acf.fields.audioVideo = acf.field.extend({
     this.inputName = this.__getInputName()
   },
   __getInputName: function () {
-    const inputName = this.$inputContainer
-      .children(':first')
-      .attr('name')
-      .split('][')
-
-    if (inputName[inputName.length - 1].indexOf('field') == 0)
-      return inputName.join('][')
-
-    inputName.splice(inputName.length - 1, 1)
-
-    return inputName.join('][')+']'
+    return this.$inputContainer.children(':first').attr('name')
   },
   initialize: function () {
     /* noop */
   },
   __getTag: function (attributes) {
-    if (typeof attributes === 'undefined')
-      console.log({ this })
-
+    if (typeof attributes === 'undefined') { return this.o.general_type }
     return this.o.general_type && this.o.general_type !== 'both'
       ? this.o.general_type
       : this.__guessTag(attributes)
@@ -60,20 +48,19 @@ acf.fields.audioVideo = acf.field.extend({
     return 'video'
   },
   render: function ({ tag, nextAttributes, prevAttributes }) {
-    const sources = tag
+    const sources = ( tag && tag != undefined ) 
       ? this.__getSources(tag, nextAttributes)
       : []
-    
+
     this.$playerContainer.empty().removeClass('audio video')
     this.$inputContainer.empty()
-
     if (sources.length) {
       const $mediaElement = this.$playerContainer
         .addClass(tag)
         .html(this.__getPlayerMarkup(tag, nextAttributes, sources))
         .find(tag)
 
-      new MediaElementPlayer($mediaElement)
+      new MediaElementPlayer($mediaElement[0])
       
       Object.keys(nextAttributes).forEach(name =>
         this.__insertHiddenInput(name, nextAttributes[name])

@@ -42,13 +42,11 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
 	var _SelectFrame = __webpack_require__(1);
 	
@@ -84,20 +82,15 @@
 	    this.inputName = this.__getInputName();
 	  },
 	  __getInputName: function __getInputName() {
-	    var inputName = this.$inputContainer.children(':first').attr('name').split('][');
-	
-	    if (inputName[inputName.length - 1].indexOf('field') == 0) return inputName.join('][');
-	
-	    inputName.splice(inputName.length - 1, 1);
-	
-	    return inputName.join('][') + ']';
+	    return this.$inputContainer.children(':first').attr('name');
 	  },
 	  initialize: function initialize() {
 	    /* noop */
 	  },
 	  __getTag: function __getTag(attributes) {
-	    if (typeof attributes === 'undefined') console.log({ this: this });
-	
+	    if (typeof attributes === 'undefined') {
+	      return this.o.general_type;
+	    }
 	    return this.o.general_type && this.o.general_type !== 'both' ? this.o.general_type : this.__guessTag(attributes);
 	  },
 	  __guessTag: function __guessTag(attributes) {
@@ -110,19 +103,18 @@
 	  render: function render(_ref) {
 	    var _this = this;
 	
-	    var tag = _ref.tag;
-	    var nextAttributes = _ref.nextAttributes;
-	    var prevAttributes = _ref.prevAttributes;
+	    var tag = _ref.tag,
+	        nextAttributes = _ref.nextAttributes,
+	        prevAttributes = _ref.prevAttributes;
 	
-	    var sources = tag ? this.__getSources(tag, nextAttributes) : [];
+	    var sources = tag && tag != undefined ? this.__getSources(tag, nextAttributes) : [];
 	
 	    this.$playerContainer.empty().removeClass('audio video');
 	    this.$inputContainer.empty();
-	
 	    if (sources.length) {
 	      var $mediaElement = this.$playerContainer.addClass(tag).html(this.__getPlayerMarkup(tag, nextAttributes, sources)).find(tag);
 	
-	      new MediaElementPlayer($mediaElement);
+	      new MediaElementPlayer($mediaElement[0]);
 	
 	      Object.keys(nextAttributes).forEach(function (name) {
 	        return _this.__insertHiddenInput(name, nextAttributes[name]);
@@ -171,8 +163,8 @@
 	    var height = tag == 'video' ? 'height="360"' : '';
 	
 	    return '<div class="wp-' + tag + '">\n      <!--[if lt IE 9]><script>document.createElement(\'' + tag + '\');</script><![endif]-->\n      <' + tag + ' class="wp-' + tag + '-shortcode" width="640" ' + height + ' ' + atts + ' controls>\n        ' + sources.map(function (_ref2) {
-	      var type = _ref2.type;
-	      var src = _ref2.src;
+	      var type = _ref2.type,
+	          src = _ref2.src;
 	      return '<source type="' + type + '" src="' + src + '?_=1"/>';
 	    }) + '\n      </' + tag + '>\n    </div>';
 	  },
@@ -184,9 +176,8 @@
 	    }, '');
 	  },
 	  __insertHiddenInput: function __insertHiddenInput(attName, value) {
-	    var _$field$data = this.$field.data();
-	
-	    var key = _$field$data.key;
+	    var _$field$data = this.$field.data(),
+	        key = _$field$data.key;
 	
 	    var name = !attName ? this.inputName : this.inputName + '[' + attName + ']';
 	
@@ -218,42 +209,36 @@
 	        var $row = multiple && $field.closest('.acf-row');
 	
 	        if (idx > 0) {
-	          var _ret = function () {
-	            var key = $field.data('key');
+	          var key = $field.data('key');
 	
-	            $field = false;
+	          $field = false;
 	
-	            // find next field
-	            $row.nextAll('.acf-row:visible').each(function (idx, el) {
-	              $field = acf.get_field(key, $(el));
+	          // find next field
+	          $row.nextAll('.acf-row:visible').each(function (idx, el) {
+	            $field = acf.get_field(key, $(el));
 	
-	              if (!$field) return;
+	            if (!$field) return;
 	
-	              // bail early if next file uploader has value
-	              if ($field.find('.acf-file-uploader.has-value').exists()) {
-	                $field = false;
-	                return;
-	              }
-	
-	              // end loop if $next is found
-	              return false;
-	            });
-	
-	            // add extra row if next is not found
-	            if (!$field) {
-	              $row = acf.fields.repeater.doFocus($repeater).add();
-	
-	              // bail early if no $row (maximum rows hit)
-	              if (!$row) return {
-	                  v: false
-	                };
-	
-	              // get next $field
-	              $field = acf.get_field(key, $row);
+	            // bail early if next file uploader has value
+	            if ($field.find('.acf-file-uploader.has-value').exists()) {
+	              $field = false;
+	              return;
 	            }
-	          }();
 	
-	          if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	            // end loop if $next is found
+	            return false;
+	          });
+	
+	          // add extra row if next is not found
+	          if (!$field) {
+	            $row = acf.fields.repeater.doFocus($repeater).add();
+	
+	            // bail early if no $row (maximum rows hit)
+	            if (!$row) return false;
+	
+	            // get next $field
+	            $field = acf.get_field(key, $row);
+	          }
 	        }
 	
 	        var ext = attachment.attributes.url.toLowerCase().split('.').pop();
@@ -276,18 +261,16 @@
 	    var shortcode = this.__getShortcode(tag, prevAttributes);
 	
 	    if (shortcode) {
-	      (function () {
-	        var editFrame = wp.media[tag].edit(shortcode).open();
+	      var editFrame = wp.media[tag].edit(shortcode).open();
 	
-	        editFrame.on('close', function () {
-	          var nextAttributes = _this4.__getNextAttributes(tag, editFrame.media.attributes);
-	          var $repeater = acf.get_closest_field(_this4.$field, 'repeater');
-	          var args = { tag: tag, nextAttributes: nextAttributes, prevAttributes: prevAttributes };
+	      editFrame.on('close', function () {
+	        var nextAttributes = _this4.__getNextAttributes(tag, editFrame.media.attributes);
+	        var $repeater = acf.get_closest_field(_this4.$field, 'repeater');
+	        var args = { tag: tag, nextAttributes: nextAttributes, prevAttributes: prevAttributes };
 	
-	          _this4.render(args);
-	          editFrame.detach();
-	        });
-	      })();
+	        _this4.render(args);
+	        editFrame.detach();
+	      });
 	    }
 	  },
 	  __getAttributesFromInputs: function __getAttributesFromInputs() {
@@ -331,9 +314,9 @@
 	  if (/^__/.test(prop)) acf.fields.audioVideo[prop] = acf.fields.audioVideo[prop].bind(acf.fields.audioVideo);
 	});
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	'use strict';
 	
@@ -456,6 +439,6 @@
 	
 	exports.default = SelectFrame;
 
-/***/ }
+/***/ })
 /******/ ]);
 //# sourceMappingURL=acf-audio-video-field.js.map
